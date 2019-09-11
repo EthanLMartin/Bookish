@@ -1,8 +1,18 @@
-﻿@{
+﻿@model List<Bookish.DataAccess.Book>
+
+@{
     ViewBag.Title = "Catalogue";
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.
-	@ViewData["Books"]</p>
+<p>Use this area to provide additional information.</p>
+
+@foreach (var item in Model)
+{
+	<b>@item.ISBN;
+	@item.Title;
+	@item.Author <br /></b>
+}
+
+

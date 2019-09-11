@@ -22,7 +22,7 @@ namespace Bookish.Web.Controllers
 
             ViewData["Books"] = bookRepositry.GetAllBooks();
 
-            return View();
+            return View(bookRepositry.GetAllBooks());
         }
     }
 }
