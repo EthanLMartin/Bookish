@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A0B1F8D9-260B-467C-96F7-74506E69A988}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Bookish.DataAccess</RootNamespace>
     <AssemblyName>Bookish.DataAccess</AssemblyName>
@@ -52,7 +52,6 @@
     <Compile Include="BookCopy.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="Loan.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
