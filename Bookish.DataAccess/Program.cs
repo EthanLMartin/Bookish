@@ -15,21 +15,23 @@ namespace Program
     {
         static void Main(string[] args)
         {
-            IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-            string SqlString = "SELECT TOP 100 [ISBN],[title],[author] FROM [Books]";
-
-            var books = (List<Book>)db.Query<Book>(SqlString);
-
-            foreach (var book in books)
+            using (IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                Console.WriteLine(new string('*', 20));
-                Console.WriteLine("\nBook ISBN: " + book.ISBN);
-                Console.WriteLine("Book Title: " + book.Title);
-                Console.WriteLine("Author: " + book.Author + "\n");
-                Console.WriteLine(new string('*', 20));
-            }
+                string SqlString = "SELECT TOP 100 [ISBN],[title],[author] FROM [Books]";
 
-            Console.ReadLine();
+                var books = (List<Book>) db.Query<Book>(SqlString);
+
+                foreach (var book in books)
+                {
+                    Console.WriteLine(new string('*', 20));
+                    Console.WriteLine("\nBook ISBN: " + book.ISBN);
+                    Console.WriteLine("Book Title: " + book.Title);
+                    Console.WriteLine("Author: " + book.Author + "\n");
+                    Console.WriteLine(new string('*', 20));
+                }
+
+                Console.ReadLine();
+            }
         }
     }
 }
