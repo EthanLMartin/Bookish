@@ -24,8 +24,8 @@ namespace Program
             {
                 Console.WriteLine(new string('*', 20));
                 Console.WriteLine("\nBook ISBN: " + book.ISBN);
-                Console.WriteLine("Book Title: " + book.title);
-                Console.WriteLine("Author: " + book.author + "\n");
+                Console.WriteLine("Book Title: " + book.Title);
+                Console.WriteLine("Author: " + book.Author + "\n");
                 Console.WriteLine(new string('*', 20));
             }
 
