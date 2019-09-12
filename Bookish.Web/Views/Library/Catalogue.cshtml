@@ -6,13 +6,18 @@
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<p>Current available books</p>
 
+
+<ul>
 @foreach (var item in Model)
 {
-	<b>@item.ISBN;
-	@item.Title;
-	@item.Author <br /></b>
+    <a href=@String.Format("Copies/?ISBN={0}", item.ISBN)>
+        <li>@item.ISBN:
+            <b>@item.Title</b> by
+            @item.Author</li>
+    </a>
 }
+</ul>
 
 

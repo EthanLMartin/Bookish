@@ -1,0 +1,39 @@
+﻿@model List<Bookish.DataAccess.BookCopy>
+
+@{
+    ViewBag.Title = ViewData["BookTitle"];
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>Current available copies: 
+    @{
+        var copies = 0;
+        foreach (var item in Model)
+        {
+            if (!item.Borrowed)
+            {
+                copies++;
+            }
+        }
+        <b>@copies</b>
+    }
+</p>
+
+
+<table class="table table-bordered table-responsive table-hover">
+    <tr>
+        <th>Loaned to user</th>
+        <th>Due date</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        if (item.Borrowed)
+        {
+            <tr>
+                <td>@item.Loan.UserId</td>
+                <td>@item.Loan.DueDate</td>
+            </tr>
+        }
+    }
+</table>

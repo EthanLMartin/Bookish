@@ -20,9 +20,16 @@ namespace Bookish.Web.Controllers
         {
             var bookRepositry = new BookRepository();
 
-            ViewData["Books"] = bookRepositry.GetAllBooks();
 
-            return View(bookRepositry.GetAllBooks());
+            return View(bookRepositry.GetAllBooks().OrderBy(book => book.Title).ToList());
+        }
+
+        [HttpGet]
+        public ActionResult Copies(String ISBN)
+        {
+            var bookRespository = new BookRepository();
+            ViewData["BookTitle"] = bookRespository.GetBook(ISBN).Title;
+            return View(bookRespository.GetBookCopies(ISBN));
         }
     }
 }

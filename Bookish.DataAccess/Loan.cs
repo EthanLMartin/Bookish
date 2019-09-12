@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Bookish.DataAccess
 {
-    class Loan
+    public class Loan
     {
-
+        public String Barcode { get; private set; }
+        public String UserId { get; private set; }
+        public DateTime DueDate { get; private set; }
+        public bool Completed { get; set; }
     }
 }

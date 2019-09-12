@@ -21,5 +21,36 @@ namespace Bookish.DataAccess
                 return (List<Book>)db.Query<Book>(SqlString);
             }
         }
+
+        public Book GetBook(String ISBN)
+        {
+            string sqlString = "SELECT * FROM [Books] WHERE [ISBN] = " + ISBN;
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                return ((List<Book>)db.Query<Book>(sqlString)).FirstOrDefault();
+            }
+        }
+
+        public List<BookCopy> GetBookCopies(String ISBN)
+        {
+            string sqlString = "SELECT * FROM [BookCopies] WHERE [ISBN] = " + ISBN;
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                var bookCopies = (List<BookCopy>) db.Query<BookCopy>(sqlString);
+                foreach (var bookCopy in bookCopies)
+                {
+                    if (bookCopy.Borrowed)
+                    {
+                        sqlString = "SELECT * FROM [Loans] WHERE [Barcode] = " + bookCopy.Barcode + 
+                            " AND [Completed] = 0";
+                        bookCopy.Loan = ((List<Loan>) db.Query<Loan>(sqlString)).FirstOrDefault();
+                    }
+                }
+
+                return bookCopies;
+            }
+        }
     }
 }

@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Bookish.DataAccess
 {
-    class BookCopy
+    public class BookCopy
     {
         public string Barcode { get; private set; }
+        public string ISBN { get; private set; }
+        public bool Borrowed { get; private set; }
         public Loan Loan { get; set; } = null;
     }
 }
