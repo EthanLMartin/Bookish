@@ -33,7 +33,7 @@ namespace Bookish.DataAccess
 
         public void AddCopiesOfBook(Book book, int numberOfCopies)
         {
-            var sqlString = "INSERT INTO [BookCopies] VALUES (@ISBN, 0)";
+            var sqlString = @"INSERT INTO [BookCopies] VALUES (@ISBN, 0)";
 
             using (System.Data.IDbConnection db = new SqlConnection(ConnectionString))
             {
@@ -103,6 +103,17 @@ namespace Bookish.DataAccess
                 new SqlConnection(ConnectionString))
             {
                 return ((List<Loan>)db.Query<Loan>(sqlString, new { barcode })).FirstOrDefault();
+            }
+        }
+
+        public List<int> GetLastBarcodes(int number)
+        {
+            string sqlString = "SELECT TOP (@number) * FROM [BookCopies] ORDER BY [Barcode] DESC";
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConnectionString))
+            {
+                List<BookCopy> lastBookCopies = (List<BookCopy>) db.Query<BookCopy>(sqlString, new {number});
+                return lastBookCopies.Select(copy => copy.Barcode).ToList();
             }
         }
     }

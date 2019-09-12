@@ -1,0 +1,19 @@
+﻿@model List<int>
+
+@{
+    ViewBag.Title = "Success";
+}
+<h2>@ViewBag.Title!</h2>
+<h3>Please print out these barcodes and place them on each copy.</h3>
+
+<p>
+    @foreach (var item in Model)
+    {
+        <div style="border: 3px solid black; padding: 15px; width: 150px">
+            <center>
+                <b>Barcode: @item</b>
+            </center>
+        </div>
+
+    }
+</p>

@@ -58,7 +58,20 @@ namespace Bookish.Web.Controllers
             bookRepository.AddBook(book);
             bookRepository.AddCopiesOfBook(book, model.NumberOfCopies);
 
-            return View();
+            TempData["Barcodes"] = bookRepository.GetLastBarcodes(model.NumberOfCopies);
+
+            return Redirect("Success");
+        }
+
+        [HttpGet]
+        public ActionResult Success()
+        {
+            if (TempData["Barcodes"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(TempData["Barcodes"]);
         }
     }
 }
