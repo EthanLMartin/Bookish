@@ -8,11 +8,11 @@ namespace Bookish.DataAccess
 {
     public class Book
     {
-        public string ISBN { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
+        public string ISBN { get; set; } = null;
+        public string Title { get; set; } = null;
+        public string Author { get; set; } = null;
 
-        public Book(string isbn, string title, string author)
+        public Book(string isbn=null, string title=null, string author=null)
         {
             ISBN = isbn;
             Title = title;

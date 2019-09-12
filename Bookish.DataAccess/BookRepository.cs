@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -32,12 +33,11 @@ namespace Bookish.DataAccess
 
         public void AddCopiesOfBook(Book book, int numberOfCopies)
         {
-            var sqlString = "INSERT INTO [BookCopies] VALUES (@ISBN, @Title, @Author)";
-            if (!book.IsValidBook() || GetBookFromISBN(book.ISBN) != null)
-                return;
+            var sqlString = "INSERT INTO [BookCopies] VALUES (@ISBN, 0)";
+
             using (System.Data.IDbConnection db = new SqlConnection(ConnectionString))
             {
-                db.Execute(sqlString, new { book.ISBN, book.Title, book.Author });
+                db.Execute(sqlString, Enumerable.Repeat(new { book.ISBN }, numberOfCopies));
             }
         }
 
