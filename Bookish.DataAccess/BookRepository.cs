@@ -18,6 +18,29 @@ namespace Bookish.DataAccess
             ConnectionString = connectionString;
             // ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString
         }
+
+        public void AddBook(Book book)
+        {
+            var sqlString = "INSERT INTO [Books] VALUES (@ISBN, @Title, @Author)";
+            if (!book.IsValidBook() || GetBookFromISBN(book.ISBN) != null)
+                return;
+            using (System.Data.IDbConnection db = new SqlConnection(ConnectionString))
+            {
+                db.Execute(sqlString, new {book.ISBN, book.Title, book.Author});
+            }
+        }
+
+        public void AddCopiesOfBook(Book book, int numberOfCopies)
+        {
+            var sqlString = "INSERT INTO [BookCopies] VALUES (@ISBN, @Title, @Author)";
+            if (!book.IsValidBook() || GetBookFromISBN(book.ISBN) != null)
+                return;
+            using (System.Data.IDbConnection db = new SqlConnection(ConnectionString))
+            {
+                db.Execute(sqlString, new { book.ISBN, book.Title, book.Author });
+            }
+        }
+
         public List<Book> GetAllBooks()
         {
             string SqlString = "SELECT * FROM [Books]";
@@ -29,7 +52,7 @@ namespace Bookish.DataAccess
             }
         }
 
-        public Book GetBook(String ISBN)
+        public Book GetBookFromISBN(String ISBN)
         {
             string sqlString = "SELECT * FROM [Books] WHERE [ISBN] = @ISBN";
             using (System.Data.IDbConnection db =

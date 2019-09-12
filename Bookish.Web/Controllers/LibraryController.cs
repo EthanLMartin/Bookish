@@ -28,7 +28,7 @@ namespace Bookish.Web.Controllers
         public ActionResult Copies(String ISBN)
         {
             var bookRepository = new BookRepository(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
-            ViewData["BookTitle"] = bookRepository.GetBook(ISBN).Title;
+            ViewData["BookTitle"] = bookRepository.GetBookFromISBN(ISBN).Title;
 
             var bookCopies = bookRepository.GetBookCopies(ISBN);
 
@@ -41,5 +41,6 @@ namespace Bookish.Web.Controllers
             }
             return View(bookCopies);
         }
+
     }
 }

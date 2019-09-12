@@ -14,7 +14,7 @@ namespace Program
     {
         static void Main(string[] args)
         {
-            var bookManager = new BookRepository();
+            var bookManager = new BookRepository(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
             var books = bookManager.GetAllBooks();
 
