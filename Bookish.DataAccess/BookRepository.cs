@@ -61,7 +61,7 @@ namespace Bookish.DataAccess
                 return ((List<Book>)db.Query<Book>(sqlString, new { ISBN })).FirstOrDefault();
             }
         }
-        public Book GetBookFromBarcode(String barcode)
+        public Book GetBookFromBarcode(int barcode)
         {
             string sqlString = "SELECT b.* " +
                                "FROM [Books] b JOIN [BookCopies] c ON b.ISBN = c.ISBN";
@@ -96,7 +96,7 @@ namespace Bookish.DataAccess
             }
         }
 
-        public Loan GetLoan(string barcode)
+        public Loan GetLoan(int barcode)
         {
             string sqlString = "SELECT * FROM [Loans] WHERE [Barcode] = @barcode AND [Completed] = 0"; ;
             using (System.Data.IDbConnection db =

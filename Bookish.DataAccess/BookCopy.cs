@@ -8,7 +8,7 @@ namespace Bookish.DataAccess
 {
     public class BookCopy
     {
-        public string Barcode { get; private set; }
+        public int Barcode { get; private set; }
         public string ISBN { get; private set; }
         public bool Borrowed { get; private set; }
         public Loan Loan { get; set; } = null;

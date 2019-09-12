@@ -16,13 +16,13 @@ CREATE TABLE Books (
 
 
 CREATE TABLE BookCopies (
-    barcode VARCHAR(30) NOT NULL PRIMARY KEY,
+    barcode INT IDENTITY(1, 1) PRIMARY KEY,
     ISBN CHAR(13) NOT NULL FOREIGN KEY REFERENCES Books(ISBN),
     borrowed BIT NOT NULL
 );
 
 CREATE TABLE Loans (
-    barcode VARCHAR(30) NOT NULL FOREIGN KEY REFERENCES BookCopies(barcode),
+    barcode INT FOREIGN KEY REFERENCES BookCopies(barcode),
     userId VARCHAR(30) NOT NULL FOREIGN KEY REFERENCES Users(userId),
     dueDate DATE,
     completed BIT NOT NULL

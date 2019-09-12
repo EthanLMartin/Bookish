@@ -8,7 +8,7 @@ namespace Bookish.DataAccess
 {
     public class Loan
     {
-        public String Barcode { get; private set; }
+        public int Barcode { get; private set; }
         public String UserId { get; private set; }
         public DateTime DueDate { get; private set; }
         public bool Completed { get; set; }

@@ -16,9 +16,9 @@ INSERT INTO Books VALUES
 ('9780439064866', 'Harry Potter and the Chamber of Secrets', 'J. K. Rowling');
 
 INSERT INTO BookCopies VALUES
-('1', '9780132350884', 0),
-('2', '9780132350884', 1),
-('3', '9780132350884', 1);
+('9780132350884', 0),
+('9780132350884', 1),
+('9780132350884', 1);
 
 INSERT INTO Loans VALUES 
 ('2', 'person', '2019-09-12', 0),
