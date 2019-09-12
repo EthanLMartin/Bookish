@@ -6,6 +6,9 @@ namespace Bookish.Web.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
+        [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
@@ -13,6 +16,7 @@ namespace Bookish.Web.Models
     public class ExternalLoginListViewModel
     {
         public string ReturnUrl { get; set; }
+
     }
 
     public class SendCodeViewModel
@@ -49,9 +53,8 @@ namespace Bookish.Web.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -64,6 +67,10 @@ namespace Bookish.Web.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
