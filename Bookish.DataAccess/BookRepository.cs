@@ -11,12 +11,19 @@ namespace Bookish.DataAccess
 {
     public class BookRepository
     {
+        private readonly string ConnectionString;
+
+        public BookRepository(string connectionString = "")
+        {
+            ConnectionString = connectionString;
+            // ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString
+        }
         public List<Book> GetAllBooks()
         {
             string SqlString = "SELECT * FROM [Books]";
 
             using (System.Data.IDbConnection db = 
-                new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                new SqlConnection(ConnectionString))
             {
                 return (List<Book>)db.Query<Book>(SqlString);
             }
@@ -26,7 +33,7 @@ namespace Bookish.DataAccess
         {
             string sqlString = "SELECT * FROM [Books] WHERE [ISBN] = " + ISBN;
             using (System.Data.IDbConnection db =
-                new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                new SqlConnection(ConnectionString))
             {
                 return ((List<Book>)db.Query<Book>(sqlString)).FirstOrDefault();
             }
@@ -36,20 +43,21 @@ namespace Bookish.DataAccess
         {
             string sqlString = "SELECT * FROM [BookCopies] WHERE [ISBN] = " + ISBN;
             using (System.Data.IDbConnection db =
-                new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                new SqlConnection(ConnectionString))
             {
                 var bookCopies = (List<BookCopy>) db.Query<BookCopy>(sqlString);
-                foreach (var bookCopy in bookCopies)
-                {
-                    if (bookCopy.Borrowed)
-                    {
-                        sqlString = "SELECT * FROM [Loans] WHERE [Barcode] = " + bookCopy.Barcode + 
-                            " AND [Completed] = 0";
-                        bookCopy.Loan = ((List<Loan>) db.Query<Loan>(sqlString)).FirstOrDefault();
-                    }
-                }
 
                 return bookCopies;
+            }
+        }
+
+        public Loan GetLoan(string barcode)
+        {
+            string sqlString = "SELECT * FROM [Loans] WHERE [Barcode] = " + barcode + " AND [Completed] = 0"; ;
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConnectionString))
+            {
+                return ((List<Loan>)db.Query<Loan>(sqlString)).FirstOrDefault();
             }
         }
     }

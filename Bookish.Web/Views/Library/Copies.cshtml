@@ -8,32 +8,39 @@
 
 <p>Current available copies: 
     @{
-        var copies = 0;
+        ViewBag.Copies = 0;
         foreach (var item in Model)
         {
             if (!item.Borrowed)
             {
-                copies++;
+                ViewBag.Copies++;
             }
         }
-        <b>@copies</b>
+        <b>@ViewBag.Copies</b>
     }
 </p>
 
-
-<table class="table table-bordered table-responsive table-hover">
-    <tr>
-        <th>Loaned to user</th>
-        <th>Due date</th>
-    </tr>
-    @foreach (var item in Model)
-    {
-        if (item.Borrowed)
+@if (ViewBag.Copies < Model.Count)
+{
+    <b>Copies on loan:</b>
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Loaned to user</th>
+            <th>Due date</th>
+        </tr>
+        @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.Loan.UserId</td>
-                <td>@item.Loan.DueDate</td>
-            </tr>
+            if (item.Borrowed)
+            {
+                <tr>
+                    <td>@item.Loan.UserId</td>
+                    <td>@item.Loan.DueDate</td>
+                </tr>
+            }
         }
-    }
-</table>
+    </table>
+}
+else
+{
+    <b>There are no copies on loan!</b>
+}
