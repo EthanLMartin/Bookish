@@ -31,7 +31,17 @@ namespace Bookish.DataAccess
 
         public Book GetBook(String ISBN)
         {
-            string sqlString = "SELECT * FROM [Books] WHERE [ISBN] = " + ISBN;
+            string sqlString = "SELECT * FROM [Books] WHERE [ISBN] = @ISBN";
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConnectionString))
+            {
+                return ((List<Book>)db.Query<Book>(sqlString, new { ISBN })).FirstOrDefault();
+            }
+        }
+        public Book GetBookFromBarcode(String barcode)
+        {
+            string sqlString = "SELECT b.* " +
+                               "FROM [Books] b JOIN [BookCopies] c ON b.ISBN = c.ISBN";
             using (System.Data.IDbConnection db =
                 new SqlConnection(ConnectionString))
             {
@@ -39,13 +49,25 @@ namespace Bookish.DataAccess
             }
         }
 
-        public List<BookCopy> GetBookCopies(String ISBN)
+        public List<Loan> GetUserLoans(String userName)
         {
-            string sqlString = "SELECT * FROM [BookCopies] WHERE [ISBN] = " + ISBN;
+            string sqlString = "SELECT * FROM [Loans] WHERE" +
+                               " [UserId] = @userName AND [Completed] = 0";
+
             using (System.Data.IDbConnection db =
                 new SqlConnection(ConnectionString))
             {
-                var bookCopies = (List<BookCopy>) db.Query<BookCopy>(sqlString);
+                return (List<Loan>)db.Query<Loan>(sqlString, new {userName});
+            }
+        }
+
+        public List<BookCopy> GetBookCopies(String ISBN)
+        {
+            string sqlString = "SELECT * FROM [BookCopies] WHERE [ISBN] = @ISBN";
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConnectionString))
+            {
+                var bookCopies = (List<BookCopy>) db.Query<BookCopy>(sqlString, new { ISBN });
 
                 return bookCopies;
             }
@@ -53,11 +75,11 @@ namespace Bookish.DataAccess
 
         public Loan GetLoan(string barcode)
         {
-            string sqlString = "SELECT * FROM [Loans] WHERE [Barcode] = " + barcode + " AND [Completed] = 0"; ;
+            string sqlString = "SELECT * FROM [Loans] WHERE [Barcode] = @barcode AND [Completed] = 0"; ;
             using (System.Data.IDbConnection db =
                 new SqlConnection(ConnectionString))
             {
-                return ((List<Loan>)db.Query<Loan>(sqlString)).FirstOrDefault();
+                return ((List<Loan>)db.Query<Loan>(sqlString, new { barcode })).FirstOrDefault();
             }
         }
     }

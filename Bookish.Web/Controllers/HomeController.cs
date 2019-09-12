@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Bookish.DataAccess;
 
 namespace Bookish.Web.Controllers
 {
@@ -10,6 +12,20 @@ namespace Bookish.Web.Controllers
     {
         public ActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                var bookRepository = new BookRepository(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+
+                List<Loan> loans = bookRepository.GetUserLoans(User.Identity.Name);
+                Dictionary<Loan, Book> data = new Dictionary<Loan, Book>();
+
+                foreach (var loan in loans)
+                {
+                    data[loan] = bookRepository.GetBookFromBarcode(loan.Barcode);
+                }
+
+                return View(data);
+            }
             return View();
         }
 
