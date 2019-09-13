@@ -18,6 +18,21 @@
         }
         <b>@ViewBag.Copies</b>
     }
+    <input type="button"
+           value="Borrow"
+           onclick="location.href='@Url.Action("LoanBook", "Library")?ISBN=@Model.First().ISBN'" />
+    <br/>
+    @if (TempData.ContainsKey("Borrowed"))
+    {
+        if ((bool) TempData["Borrowed"])
+        {
+            <span style="color:lightseagreen">Book successfully borrowed.</span>
+        }
+        else
+        {
+            <span style="color:lightcoral">Could not borrow book. You must be logged in, and there must be copies available.</span>
+        }
+    }
 </p>
 
 @if (ViewBag.Copies < Model.Count)

@@ -86,5 +86,18 @@ namespace Bookish.Web.Controllers
 
             return View(TempData["Barcodes"]);
         }
+
+        public ActionResult LoanBook(string ISBN)
+        {
+            var bookRepository = new BookRepository(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+            TempData["Borrowed"] = false;
+            if (bookRepository.GetAvailableBookCopy(ISBN) != null && User.Identity.IsAuthenticated)
+            {
+                bookRepository.LoanBook(User.Identity.Name, ISBN);
+                TempData["Borrowed"] = true;
+            }
+
+            return Redirect("Copies/?ISBN=" + ISBN);
+        }
     }
 }

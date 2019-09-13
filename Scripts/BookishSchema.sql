@@ -2,12 +2,6 @@ DROP DATABASE IF EXISTS bookish;
 CREATE DATABASE bookish;
 USE bookish;
 
-CREATE TABLE Users (
-    userId VARCHAR(30) NOT NULL PRIMARY KEY,
-    userName VARCHAR(50),
-    userPassword VARCHAR(30) NOT NULL 
-);
-
 CREATE TABLE Books (
     ISBN CHAR(13) NOT NULL PRIMARY KEY,
     title VARCHAR(80),
@@ -23,7 +17,7 @@ CREATE TABLE BookCopies (
 
 CREATE TABLE Loans (
     barcode INT FOREIGN KEY REFERENCES BookCopies(barcode),
-    userId VARCHAR(30) NOT NULL FOREIGN KEY REFERENCES Users(userId),
+    userId VARCHAR(30) NOT NULL,
     dueDate DATE,
     completed BIT NOT NULL
 );

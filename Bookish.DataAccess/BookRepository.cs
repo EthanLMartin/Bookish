@@ -98,6 +98,48 @@ namespace Bookish.DataAccess
             }
         }
 
+        public BookCopy GetAvailableBookCopy(string ISBN)
+        {
+            string sqlString = "SELECT TOP (1) * FROM [BookCopies] WHERE [ISBN] = @ISBN AND [Borrowed] = 0";
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConnectionString))
+            {
+                return db.Query<BookCopy>(sqlString, new { ISBN }).FirstOrDefault();
+            }
+        }
+
+        public bool LoanBook(string userName, string ISBN)
+        {
+            var bookCopy = GetAvailableBookCopy(ISBN);
+            if (bookCopy == null)
+                return false;
+
+            UpdateBookCopyBorrowedField(bookCopy.Barcode, true);
+            AddLoan(bookCopy.Barcode, userName);
+            return true;
+        }
+
+        private void UpdateBookCopyBorrowedField(int barcode, bool borrowed)
+        {
+            var sqlString = "UPDATE [BookCopies] SET [Borrowed] = @borrowed WHERE [Barcode] = @Barcode";
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConnectionString))
+            {
+                db.Execute(sqlString, new {barcode, borrowed});
+            }
+        }
+
+        private void AddLoan(int barcode, string userName)
+        {
+            var dueDate = DateTime.Now.AddDays(14);
+            var sqlString = "INSERT INTO [Loans] VALUES(@barcode, @userName, @dueDate, 0)";
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConnectionString))
+            {
+                db.Execute(sqlString, new { barcode, userName, dueDate });
+            }
+        }
+
         public List<BookCopy> GetBookCopies(String ISBN)
         {
             string sqlString = "SELECT * FROM [BookCopies] WHERE [ISBN] = @ISBN";
