@@ -8,20 +8,24 @@
 
 <p>Current available copies: 
     @{
-        ViewBag.Copies = 0;
+        var copies = 0;
         foreach (var item in Model)
-        {
-            if (!item.Borrowed)
             {
-                ViewBag.Copies++;
+                if (!item.Borrowed)
+                {
+                    copies++;
+                }
             }
+            <b>@copies</b>
         }
-        <b>@ViewBag.Copies</b>
+        @if (Model.Count != 0)
+    {
+        <input type="button"
+               value="Borrow"
+               onclick="location.href = '@Url.Action("LoanBook", "Library")?ISBN=@Model.First().ISBN'"/>
+        <br/>
     }
-    <input type="button"
-           value="Borrow"
-           onclick="location.href='@Url.Action("LoanBook", "Library")?ISBN=@Model.First().ISBN'" />
-    <br/>
+    
     @if (TempData.ContainsKey("Borrowed"))
     {
         if ((bool) TempData["Borrowed"])
