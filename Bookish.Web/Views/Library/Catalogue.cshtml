@@ -16,13 +16,16 @@ else
 
 
 
-<ul>
+<ul class="list-group">
 @foreach (var item in Model)
 {
     <a href=@String.Format("Copies/?ISBN={0}", item.ISBN)>
-        <li>@item.ISBN:
+        <li class="list-group-item" style="border-bottom-width:2px">
+            <img src="http://covers.openlibrary.org/b/isbn/@item.ISBN-S.jpg"/>
+            @item.ISBN:
             <b>@item.Title</b> by
-            @item.Author</li>
+            @item.Author
+        </li>
     </a>
 }
 </ul>
