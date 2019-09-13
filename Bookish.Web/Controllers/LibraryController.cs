@@ -117,11 +117,21 @@ namespace Bookish.Web.Controllers
         {
             string connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
+            var bookRepository = new BookRepository(connection);
             var loanRepository = new LoanRepository(connection);
+
+            TempData["Success"] = false;
 
             try
             {
+                Loan loan = loanRepository.GetLoan(int.Parse(barcode));
+                if (loan.UserId != User.Identity.Name)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
                 loanRepository.ReturnBook(int.Parse(barcode), User.Identity.Name);
+                TempData["Success"] = true;
             }
             catch { }
 

@@ -11,29 +11,49 @@
 @if (User.Identity.IsAuthenticated)
 {
     <p class="lead">Books you currently have checked out:</p>
-    <table class="table table-bordered table-responsive table-hover">
-        <tr>
-            <th>Book Loaned</th>
-            <th>Due Date</th>
-            <th style="width:1px"></th>
-        </tr>
-        @foreach (var item in Model)
+
+    if (TempData.ContainsKey("Success"))
+    {
+        if ((bool)TempData["Success"])
         {
-            var loan = item.Key;
-            var book = item.Value;
-            <tr>
-                <td>
-                    @book.Title, @book.Author
-                </td>
-                <td>@loan.DueDate.ToString("dd/MM/yyyy")</td>
-                <td>
-                    <input type="button"
-                           value="Return"
-                           onclick="location.href = '@Url.Action("ReturnBook", "Library")?Barcode=@item.Key.Barcode'" />
-                </td>
-            </tr>
+            <span style="color:lightseagreen">Book successfully returned.</span>
         }
-    </table>
+        else
+        {
+            <span style="color:lightcoral">Could not return book. Please consult someone.</span>
+        }
+    }
+
+    if (Model.Count != 0)
+    {
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Book Loaned</th>
+                <th>Due Date</th>
+                <th style="width: 1px"></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                var loan = item.Key;
+                var book = item.Value;
+                <tr>
+                    <td>
+                        @book.Title, @book.Author
+                    </td>
+                    <td>@loan.DueDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <input type="button"
+                               value="Return"
+                               onclick="location.href = '@Url.Action("ReturnBook", "Library")?Barcode=@item.Key.Barcode'" />
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <h4>You haven't got any loaned books!</h4>
+    }
 }
 else
 {
