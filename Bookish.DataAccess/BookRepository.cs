@@ -14,10 +14,9 @@ namespace Bookish.DataAccess
     {
         private readonly string ConnectionString;
 
-        public BookRepository(string connectionString = "")
+        public BookRepository(string connectionString)
         {
-            ConnectionString = connectionString;
-            // ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString
+            ConnectionString = connectionString ?? ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         }
 
         public void AddBook(Book book)
@@ -31,13 +30,16 @@ namespace Bookish.DataAccess
             }
         }
 
-        public void AddCopiesOfBook(Book book, int numberOfCopies)
+        public List<int> AddCopiesOfBook(Book book, int numberOfCopies)
         {
-            var sqlString = @"INSERT INTO [BookCopies] VALUES (@ISBN, 0)";
+            const string insertSqlString = @"INSERT INTO [BookCopies] VALUES (@ISBN, 0)";
+            const string selectSlString = "SELECT TOP (@numberOfCopies) * FROM [BookCopies] ORDER BY [Barcode] DESC";
 
             using (System.Data.IDbConnection db = new SqlConnection(ConnectionString))
             {
-                db.Execute(sqlString, Enumerable.Repeat(new { book.ISBN }, numberOfCopies));
+                    db.Execute(insertSqlString, Enumerable.Repeat(new {book.ISBN}, numberOfCopies));
+                    var lastBookCopies = db.Query<BookCopy>(selectSlString, new {numberOfCopies});
+                    return lastBookCopies.Select(copy => copy.Barcode).ToList();
             }
         }
 
@@ -52,7 +54,7 @@ namespace Bookish.DataAccess
             }
         }
 
-        public List<Book> FindAllBooks(string search)
+        public List<Book> FindBooks(string search)
         {
             string searchTerm = "%" + search + "%";
             string SqlString = "SELECT * FROM [Books]" +
@@ -78,11 +80,12 @@ namespace Bookish.DataAccess
         public Book GetBookFromBarcode(int barcode)
         {
             string sqlString = "SELECT b.* " +
-                               "FROM [Books] b JOIN [BookCopies] c ON b.ISBN = c.ISBN";
+                               "FROM [Books] b JOIN [BookCopies] c ON b.ISBN = c.ISBN " +
+                               "WHERE c.Barcode = @barcode";
             using (System.Data.IDbConnection db =
                 new SqlConnection(ConnectionString))
             {
-                return ((List<Book>)db.Query<Book>(sqlString)).FirstOrDefault();
+                return ((List<Book>)db.Query<Book>(sqlString, new {barcode} )).FirstOrDefault();
             }
         }
 
@@ -159,17 +162,6 @@ namespace Bookish.DataAccess
                 new SqlConnection(ConnectionString))
             {
                 return ((List<Loan>)db.Query<Loan>(sqlString, new { barcode })).FirstOrDefault();
-            }
-        }
-
-        public List<int> GetLastBarcodes(int number)
-        {
-            string sqlString = "SELECT TOP (@number) * FROM [BookCopies] ORDER BY [Barcode] DESC";
-            using (System.Data.IDbConnection db =
-                new SqlConnection(ConnectionString))
-            {
-                List<BookCopy> lastBookCopies = (List<BookCopy>) db.Query<BookCopy>(sqlString, new {number});
-                return lastBookCopies.Select(copy => copy.Barcode).ToList();
             }
         }
     }

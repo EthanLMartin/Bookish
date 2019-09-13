@@ -26,7 +26,7 @@ namespace Bookish.Web.Controllers
 
             if (search != null)
             {
-                books = bookRepository.FindAllBooks(search).OrderBy(book => book.Title).ToList();
+                books = bookRepository.FindBooks(search).OrderBy(book => book.Title).ToList();
                 TempData["Search"] = true;
             }
             else
@@ -77,9 +77,7 @@ namespace Bookish.Web.Controllers
             var bookRepository = new BookRepository(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
             var book = new Book(model.ISBN, model.Title, model.Author);
             bookRepository.AddBook(book);
-            bookRepository.AddCopiesOfBook(book, model.NumberOfCopies);
-
-            TempData["Barcodes"] = bookRepository.GetLastBarcodes(model.NumberOfCopies);
+            TempData["Barcodes"] = bookRepository.AddCopiesOfBook(book, model.NumberOfCopies);
 
             return Redirect("Success");
         }
