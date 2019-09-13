@@ -74,5 +74,17 @@ namespace Bookish.DataAccess
                 return ((List<Loan>)db.Query<Loan>(sqlString, new { barcode })).FirstOrDefault();
             }
         }
+
+        public void ReturnBook(int barcode, string user)
+        {
+            UpdateBookCopyBorrowedField(barcode, false);
+
+            var sqlString = "UPDATE [Loans] SET [Completed] = 1 WHERE [Barcode] = @barcode AND [UserId] = @user";
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConnectionString))
+            {
+                db.Execute(sqlString, new {barcode, user});
+            }
+        }
     }
 }

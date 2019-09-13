@@ -112,5 +112,20 @@ namespace Bookish.Web.Controllers
 
             return Redirect("Copies/?ISBN=" + ISBN);
         }
+
+        public ActionResult ReturnBook(string barcode)
+        {
+            string connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+            var loanRepository = new LoanRepository(connection);
+
+            try
+            {
+                loanRepository.ReturnBook(int.Parse(barcode), User.Identity.Name);
+            }
+            catch { }
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
