@@ -8,15 +8,15 @@
 
 <p>Current available copies: 
     @{
-        var copies = 0;
+        ViewBag.Copies = 0;
         foreach (var item in Model)
             {
                 if (!item.Borrowed)
                 {
-                    copies++;
+                    ViewBag.Copies++;
                 }
             }
-            <b>@copies</b>
+            <b>@ViewBag.Copies</b>
         }
         @if (Model.Count != 0)
     {
