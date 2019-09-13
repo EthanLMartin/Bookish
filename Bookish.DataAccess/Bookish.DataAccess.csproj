@@ -52,6 +52,7 @@
     <Compile Include="BookCopy.cs" />
     <Compile Include="BookRepository.cs" />
     <Compile Include="Loan.cs" />
+    <Compile Include="LoanRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

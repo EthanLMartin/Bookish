@@ -14,9 +14,12 @@ namespace Bookish.Web.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var bookRepository = new BookRepository(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+                string connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-                List<Loan> loans = bookRepository.GetUserLoans(User.Identity.Name);
+                var bookRepository = new BookRepository(connection);
+                var loanRepository = new LoanRepository(connection);
+
+                List<Loan> loans = loanRepository.GetUserLoans(User.Identity.Name);
                 Dictionary<Loan, Book> data = new Dictionary<Loan, Book>();
 
                 foreach (var loan in loans)

@@ -40,7 +40,10 @@ namespace Bookish.Web.Controllers
         [HttpGet]
         public ActionResult Copies(string ISBN)
         {
-            var bookRepository = new BookRepository(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+            string connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+            var bookRepository = new BookRepository(connection);
+            var loanRepository = new LoanRepository(connection);
 
             try
             {
@@ -57,7 +60,7 @@ namespace Bookish.Web.Controllers
             {
                 if (bookCopy.Borrowed)
                 {
-                    bookCopy.Loan = bookRepository.GetLoan(bookCopy.Barcode);
+                    bookCopy.Loan = loanRepository.GetLoan(bookCopy.Barcode);
                 }
             }
 
@@ -95,11 +98,15 @@ namespace Bookish.Web.Controllers
 
         public ActionResult LoanBook(string ISBN)
         {
-            var bookRepository = new BookRepository(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+            string connection = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+            var bookRepository = new BookRepository(connection);
+            var loanRepository = new LoanRepository(connection);
+
             TempData["Borrowed"] = false;
             if (bookRepository.GetAvailableBookCopy(ISBN) != null && User.Identity.IsAuthenticated)
             {
-                bookRepository.LoanBook(User.Identity.Name, ISBN);
+                loanRepository.LoanBook(User.Identity.Name, ISBN);
                 TempData["Borrowed"] = true;
             }
 
