@@ -11,12 +11,21 @@
 @if (User.Identity.IsAuthenticated)
 {
     <p class="lead">Books you currently have checked out:</p>
-    <b>@foreach (var item in Model)
-       {
-           var dueDate = item.Key.DueDate;
-           var book = item.Value;
-           <b>@book.Title; @book.Author; @dueDate</b>
-       }</b>
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Book Loaned</th>
+            <th>Due Date</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            var dueDate = item.Key.DueDate;
+            var book = item.Value;
+            <tr>
+                <td>@book.Title, @book.Author</td>
+                <td>@dueDate.ToString("dd/MM/yyyy")</td>
+            </tr>
+        }
+    </table>
 }
 else
 {
