@@ -15,14 +15,22 @@
         <tr>
             <th>Book Loaned</th>
             <th>Due Date</th>
+            <th style="width:1px"></th>
         </tr>
         @foreach (var item in Model)
         {
-            var dueDate = item.Key.DueDate;
+            var loan = item.Key;
             var book = item.Value;
             <tr>
-                <td>@book.Title, @book.Author</td>
-                <td>@dueDate.ToString("dd/MM/yyyy")</td>
+                <td>
+                    @book.Title, @book.Author
+                </td>
+                <td>@loan.DueDate.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <input type="button"
+                           value="Return"
+                           onclick="location.href = '@Url.Action("Index", "Home")?Barcode=@item.Key.Barcode'" />
+                </td>
             </tr>
         }
     </table>
