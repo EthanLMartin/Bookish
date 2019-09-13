@@ -6,7 +6,14 @@
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-<p>Current available books</p>
+@if (TempData["Search"] == null) {
+<h3>Current available books</h3>
+}
+else
+{
+    <h3>Books matching search:</h3>
+}
+
 
 
 <ul>

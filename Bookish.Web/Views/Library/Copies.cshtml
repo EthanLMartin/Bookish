@@ -28,15 +28,12 @@
             <th>Loaned to user</th>
             <th>Due date</th>
         </tr>
-        @foreach (var item in Model)
+        @foreach (var item in Model.FindAll(book => book.Borrowed).OrderBy(copy => copy.Loan.DueDate).ToList())
         {
-            if (item.Borrowed)
-            {
-                <tr>
-                    <td>@item.Loan.UserId</td>
-                    <td>@item.Loan.DueDate</td>
-                </tr>
-            }
+            <tr>
+                <td>@item.Loan.UserId</td>
+                <td>@item.Loan.DueDate.ToString("dd/MM/yyyy")</td>
+            </tr>
         }
     </table>
 }

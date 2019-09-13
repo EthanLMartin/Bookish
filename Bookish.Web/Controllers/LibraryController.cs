@@ -18,11 +18,23 @@ namespace Bookish.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Catalogue()
+        public ActionResult Catalogue(string search = null)
         {
             var bookRepository = new BookRepository(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
-            return View(bookRepository.GetAllBooks().OrderBy(book => book.Title).ToList());
+            var books = new List<Book>();
+
+            if (search != null)
+            {
+                books = bookRepository.FindAllBooks(search).OrderBy(book => book.Title).ToList();
+                TempData["Search"] = true;
+            }
+            else
+            {
+                books = bookRepository.GetAllBooks().OrderBy(book => book.Title).ToList();
+            }
+
+            return View(books);
         }
 
         [HttpGet]
@@ -40,6 +52,7 @@ namespace Bookish.Web.Controllers
                     bookCopy.Loan = bookRepository.GetLoan(bookCopy.Barcode);
                 }
             }
+
             return View(bookCopies);
         }
 

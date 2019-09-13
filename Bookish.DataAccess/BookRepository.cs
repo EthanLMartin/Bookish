@@ -52,6 +52,20 @@ namespace Bookish.DataAccess
             }
         }
 
+        public List<Book> FindAllBooks(string search)
+        {
+            string searchTerm = "%" + search + "%";
+            string SqlString = "SELECT * FROM [Books]" +
+                               " WHERE [Title] LIKE @searchTerm" +
+                               " OR [Author] LIKE @searchTerm";
+
+            using (System.Data.IDbConnection db =
+                new SqlConnection(ConnectionString))
+            {
+                return (List<Book>)db.Query<Book>(SqlString, new { searchTerm });
+            }
+        }
+
         public Book GetBookFromISBN(String ISBN)
         {
             string sqlString = "SELECT * FROM [Books] WHERE [ISBN] = @ISBN";
